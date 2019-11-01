@@ -1,5 +1,5 @@
 from flask_restful import Resource, Api, reqparse
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from flask import request
 from models.item import ItemModel
 import sqlite3
@@ -19,7 +19,7 @@ class Item(Resource):
                         help='store is mandatory')
 
 
-    @jwt_required()
+    @jwt_required
     def get(self, name):
         # item = next(filter(lambda item:  item['name'] == name ,items),None)
         item = ItemModel.get_item_by_name(name)
@@ -84,7 +84,8 @@ class Item(Resource):
 
 class ItemList(Resource):
     def get(self):
-        return {'items': [item.json() for item in ItemModel.query.all()]}
+        # return {'items': [item.json() for item in ItemModel.query.all()]}
+        return {'items': [item.json() for item in ItemModel.find_all()]}
         # connection = sqlite3.connect('data.db')
         # cursor = connection.cursor()
         # sql_get_all = 'SELECT * FROM  ITEMS'
